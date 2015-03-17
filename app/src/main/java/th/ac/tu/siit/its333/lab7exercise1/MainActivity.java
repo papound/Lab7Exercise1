@@ -36,13 +36,92 @@ public class MainActivity extends ActionBarActivity {
         w.execute("http://ict.siit.tu.ac.th/~cholwich/bangkok.json", "Bangkok Weather");
     }
 
+    int past_clicked = 0;
+    long past_visited = 0;
+    int visit_count = 0;
+    int nowclick_id = 0;
+
+    public void timestamp_check(int past_btnid,long past_visited_time,int now_btnid){
+
+        if(now_btnid == past_btnid){
+            long time_in_min = ((past_visited_time - System.currentTimeMillis())/1000)/60;
+            if(time_in_min > 60){
+                if(now_btnid == R.id.btBangkok){
+                    WeatherTask w = new WeatherTask();
+                    w.execute("http://ict.siit.tu.ac.th/~cholwich/bangkok.json", "Bangkok Weather");
+                }else if(now_btnid == R.id.btNon){
+                    WeatherTask w = new WeatherTask();
+                    w.execute("http://ict.siit.tu.ac.th/~cholwich/nonthaburi.json", "Nonthaburi Weather");
+                }
+                else if(now_btnid == R.id.btPathum){
+                    WeatherTask w = new WeatherTask();
+                    w.execute("http://ict.siit.tu.ac.th/~cholwich/pathumthani.json", "Pathumthani Weather");
+                }
+            }
+
+        }else{
+
+            if(now_btnid == R.id.btBangkok){
+                WeatherTask w = new WeatherTask();
+                w.execute("http://ict.siit.tu.ac.th/~cholwich/bangkok.json", "Bangkok Weather");
+            }else if(now_btnid == R.id.btNon){
+                WeatherTask w = new WeatherTask();
+                w.execute("http://ict.siit.tu.ac.th/~cholwich/nonthaburi.json", "Nonthaburi Weather");
+            }
+            else if(now_btnid == R.id.btPathum){
+                WeatherTask w = new WeatherTask();
+                w.execute("http://ict.siit.tu.ac.th/~cholwich/pathumthani.json", "Pathumthani Weather");
+            }
+
+        }
+
+    }
+
+
     public void buttonClicked(View v) {
         int id = v.getId();
         WeatherTask w = new WeatherTask();
+        nowclick_id = id;
         switch (id) {
             case R.id.btBangkok:
-                w.execute("http://ict.siit.tu.ac.th/~cholwich/bangkok.json", "Bangkok Weather");
+                if(visit_count == 0){
+                    w.execute("http://ict.siit.tu.ac.th/~cholwich/bangkok.json", "Bangkok Weather");
+                    past_clicked = R.id.btBangkok;
+                    past_visited = System.currentTimeMillis();
+                    visit_count++;
+                }else{
+                    timestamp_check(past_clicked,past_visited,nowclick_id);
+                    past_clicked = R.id.btBangkok;
+                    past_visited = System.currentTimeMillis();
+                    visit_count++;
+                }
+
                 break;
+            case R.id.btNon:
+                if(visit_count == 0){
+                    w.execute("http://ict.siit.tu.ac.th/~cholwich/nonthaburi.json", "Nonthaburi Weather");
+                    past_clicked = R.id.btNon;
+                    past_visited = System.currentTimeMillis();
+                    visit_count++;
+                }else{
+                    timestamp_check(past_clicked,past_visited,nowclick_id);
+                    past_clicked = R.id.btNon;
+                    past_visited = System.currentTimeMillis();
+                    visit_count++;
+                }
+                break;
+            case R.id.btPathum:
+                if(visit_count == 0){
+                    w.execute("http://ict.siit.tu.ac.th/~cholwich/pathumthani.json", "Pathumthani Weather");
+                    past_clicked = R.id.btPathum;
+                    past_visited = System.currentTimeMillis();
+                    visit_count++;
+                }else{
+                    timestamp_check(past_clicked,past_visited,nowclick_id);
+                    past_clicked = R.id.btPathum;
+                    past_visited = System.currentTimeMillis();
+                    visit_count++;
+                }
         }
     }
 
